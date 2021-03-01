@@ -1,15 +1,13 @@
-﻿using SensateIoT.SmartEnergy.Dsmr.Common.Models;
-using SensateIoT.SmartEnergy.Dsmr.Parser.Contract.DTO;
+﻿using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.DTO;
 
-using Telegram = SensateIoT.SmartEnergy.Dsmr.Parser.Contract.DTO.Telegram;
-
-namespace SensateIoT.SmartEnergy.Dsmr.Parser.Converters
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
 {
 	public static class TelegramConverter
 	{
-		public static Telegram Convert(Common.Models.Telegram input)
+		public static Contracts.DTO.Telegram Convert(Models.Telegram input)
 		{
-			return new Telegram {
+			return new Contracts.DTO.Telegram() {
 				GasConsumption = input.GasConsumption,
 				CurrentTariff = input.CurrentTariff == PowerTariff.Normal ? "NORMAL" : "LOW",
 				EnergyData =

@@ -3,10 +3,9 @@ using System.Diagnostics;
 using System.ServiceModel;
 
 using log4net;
-
+using SensateIoT.SmartEnergy.Dsmr.Common.Models;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Converters;
-using SensateIoT.SmartEnergy.Dsmr.Parser.DTO;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Services
 {
@@ -24,7 +23,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Services
 
 		public ParserService() { this.m_parser = new Common.Parser(); }
 
-		public Telegram Parse(string frame)
+		public Contract.DTO.Telegram Parse(string frame)
 		{
 			Telegram result;
 

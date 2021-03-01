@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Common.Attributes
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Attributes
 {
     //[Obis("1-0:1.8.1", valueIndex=1, valueUnit="kWh")]
     [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
@@ -22,9 +22,9 @@ namespace SensateIoT.SmartEnergy.Dsmr.Common.Attributes
                 throw new ArgumentOutOfRangeException(nameof(valueIndex), "Value cannot be negative");
             }
 
-            ObisIdentifier = obisIdentifier;
-            ValueIndex = valueIndex;
-            ValueUnit = valueUnit;
+            this.ObisIdentifier = obisIdentifier;
+            this.ValueIndex = valueIndex;
+            this.ValueUnit = valueUnit;
         }
     }
 }

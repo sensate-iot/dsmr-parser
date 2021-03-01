@@ -11,15 +11,15 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
     public class Server : IServer
     {
 		private ServiceHost m_host;
-		private static ILog logger = LogManager.GetLogger("Server");
+		private static ILog logger = LogManager.GetLogger(nameof(Server));
 
 		public void Start()
 		{
             var builder = ServiceBuilder.Create();
 
-            builder.WithHostname("localhost");
-            builder.WithPort(8080);
-            builder.WithPath("Dsmr");
+            builder.WithHostname("localhost")
+				.WithPort(8080)
+				.WithPath("Dsmr/ParserService");
 
             var service = builder.Build();
 

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-using SensateIoT.SmartEnergy.Dsmr.Common.Attributes;
-using SensateIoT.SmartEnergy.Dsmr.Common.Converters;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Attributes;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Common.Models
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models
 {
     public class Telegram
     {
@@ -47,7 +47,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Common.Models
 
         public override string ToString()
         {
-            return string.Join(LineEnding, Lines) + LineEnding;
+            return string.Join(LineEnding, this.Lines) + LineEnding;
         }
     }
 

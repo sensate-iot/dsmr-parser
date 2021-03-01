@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Parser.DTO
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.DTO
 {
 	[DataContract]
 	public class Telegram

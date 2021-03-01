@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Common.Converters
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
 {
     public class ObisTimestampConverter : TypeConverter
     {

@@ -6,11 +6,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Attributes;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
 
-using SensateIoT.SmartEnergy.Dsmr.Common.Attributes;
-using SensateIoT.SmartEnergy.Dsmr.Common.Models;
-
-namespace SensateIoT.SmartEnergy.Dsmr.Common
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
 {
     public class Parser
     {
@@ -29,7 +28,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Common
 
             using (StringReader reader = new StringReader(message))
             {
-                await ParseFromStringReader(reader, (object sender, Telegram telegram) => {
+                await this.ParseFromStringReader(reader, (object sender, Telegram telegram) => {
                     if(result == null) {
 	                    result = telegram;
                     }
@@ -50,7 +49,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Common
                 {
                     using (StringReader reader = new StringReader(TelegramEncoding.GetString(buffer, 0, buffer.Length)))
                     {
-                        await ParseFromStringReader(reader, onParsedEvent);
+                        await this.ParseFromStringReader(reader, onParsedEvent);
                     }
                 }
             }

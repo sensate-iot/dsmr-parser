@@ -1,7 +1,7 @@
 ﻿using System.ServiceModel;
-using SensateIoT.SmartEnergy.Dsmr.Parser.DTO;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.DTO;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Parser.Abstract
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.Abstract
 {
 	[ServiceContract]
 	public interface IParserService 

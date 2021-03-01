@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Globalization;
 
-using SensateIoT.SmartEnergy.Dsmr.Common.Models;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Common.Converters
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
 {
     public class ObisTariffConverter : TypeConverter
     {
