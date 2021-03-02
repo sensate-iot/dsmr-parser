@@ -40,4 +40,5 @@ jobs:
         run: msbuild.exe dsmr-parser.sln /nologo /nr:false /p:configuration="Debug"
 
       - name: Run tests
-        run: '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"SensateIoT.SmartEnergy.Dsmr.Parser.Tests\bin\Debug\SensateIoT.SmartEnergy.Dsmr.Parser.Tests.dll" /noisolation'
+        working-directory: SensateIoT.SmartEnergy.Dsmr.Parser.Tests\bin\Debug
+        run: '& "$(vswhere -property installationPath)\Common7\IDE\MSTest.exe" /testcontainer:"SensateIoT.SmartEnergy.Dsmr.Parser.Tests.dll" /noisolation'

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Threading;
-
 using log4net;
 using Moq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services;
 
@@ -27,12 +25,18 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 				SerialNumberGasMeter = "1234"
 			};
 
-			var calc = createGasFlowCalculator();
+			var now = DateTime.UtcNow;
+			var log = new Mock<ILog>();
+			var clock = new Mock<ISystemClock>();
+			clock.Setup(x => x.GetNowUtc()).Returns(now);
+			var calc = new GasFlowCalculator(clock.Object, log.Object);
+
 			calc.ComputeFlow(input1);
-			Thread.Sleep(TimeSpan.FromMilliseconds(990));
+			now = now.Add(TimeSpan.FromSeconds(1));
+			clock.Setup(x => x.GetNowUtc()).Returns(now);
 			var diff = calc.ComputeFlow(input2);
 
-			Assert.AreEqual(60, Math.Round(diff), "Unable to compute gas flow!");
+			Assert.AreEqual(60, Math.Round(diff));
 		}
 
 		[TestMethod]
@@ -71,7 +75,9 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 		private static GasFlowCalculator createGasFlowCalculator()
 		{
 			var log = new Mock<ILog>();
-			return new GasFlowCalculator(log.Object);
+			var clock = new Mock<ISystemClock>();
+
+			return new GasFlowCalculator(clock.Object, log.Object);
 		}
 	}
 }

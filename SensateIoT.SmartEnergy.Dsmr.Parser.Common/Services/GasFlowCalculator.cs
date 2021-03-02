@@ -14,11 +14,13 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services
 	{
 		private readonly ConcurrentDictionary<string, GasFlowCacheEntry> m_telegrams;
 		private readonly ILog m_logger;
+		private readonly ISystemClock m_clock;
 
-		public GasFlowCalculator(ILog logger)
+		public GasFlowCalculator(ISystemClock clock, ILog logger)
 		{
 			this.m_logger = logger;
 			this.m_telegrams = new ConcurrentDictionary<string, GasFlowCacheEntry>();
+			this.m_clock = clock;
 		}
 
 		public decimal ComputeFlow(Telegram telegram)
@@ -35,7 +37,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services
 
 		private decimal ComputePerMinute(GasFlowCacheEntry old, Telegram @new)
 		{
-			var diff = DateTime.UtcNow.Subtract(old.Timestamp);
+			var diff = this.m_clock.GetNowUtc().Subtract(old.Timestamp);
 			var usage = @new.GasConsumption - old.Value;
 
 			if(usage < 0) {
@@ -49,7 +51,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services
 		private void UpdateCache(Telegram telegram)
 		{
 			var entry = new GasFlowCacheEntry {
-				Timestamp = DateTime.UtcNow,
+				Timestamp = this.m_clock.GetNowUtc(),
 				Value = telegram.GasConsumption
 			};
 
