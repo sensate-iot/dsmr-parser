@@ -4,18 +4,17 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
+
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Attributes;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services
 {
-    public class Parser
+    public class Parser : IParser
     {
-        public delegate void TelegramParsedEventHandler(object sender, Telegram telegram);
-
-        private static Encoding TelegramEncoding => Encoding.ASCII;
+	    private delegate void TelegramParsedEventHandler(object sender, Telegram telegram);
 
         private const char telegramStart = '/';
         private const char telegramEnd = '!';
@@ -26,9 +25,9 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
         {
             Telegram result = null;
 
-            using (StringReader reader = new StringReader(message))
+            using (var reader = new StringReader(message))
             {
-                await this.ParseFromStringReader(reader, (object sender, Telegram telegram) => {
+                await this.ParseFromStringReader(reader, (sender, telegram) => {
                     if(result == null) {
 	                    result = telegram;
                     }
@@ -38,24 +37,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
             return result;
         }
         
-        public async Task ParseFromStream(Stream stream, TelegramParsedEventHandler onParsedEvent)
-        {
-            var buffer = new byte[8192];
-            int count;
-
-            while ((count = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-            {
-                if (count != 0)
-                {
-                    using (StringReader reader = new StringReader(TelegramEncoding.GetString(buffer, 0, buffer.Length)))
-                    {
-                        await this.ParseFromStringReader(reader, onParsedEvent);
-                    }
-                }
-            }
-        }
-
-        public async Task ParseFromStringReader(StringReader reader, TelegramParsedEventHandler onParsedEvent)
+        private async Task ParseFromStringReader(StringReader reader, TelegramParsedEventHandler onParsedEvent)
         {
 	        string line;
             Telegram telegram = null;
@@ -121,7 +103,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
                 yield return null;
             }
 
-            foreach (PropertyInfo property in GetTelegramProperties())
+            foreach (var property in GetTelegramProperties())
             {
                 var attr = property.GetCustomAttributes(typeof(ObisAttribute), false).Cast<ObisAttribute>().FirstOrDefault();
                 if (attr != null && attr.ObisIdentifier == key)
@@ -141,16 +123,14 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
 
         private static void SetTelegramCRC(ref Telegram telegram, string value)
         {
-            if (telegram.MessageVersion == ObisVersion.V42 || telegram.MessageVersion == ObisVersion.V50)
-            {
+            if (telegram.MessageVersion == ObisVersion.V42 || telegram.MessageVersion == ObisVersion.V50) {
                 var crc = value.Replace(telegramEnd.ToString(), string.Empty);
                 crc = crc.Length > 4 ? crc.Substring(0, 4) : crc;
                 var propertyInfo = GetTelegramProperty(nameof(Telegram.CRC));
+
                 SetPropertyValue(ref telegram, propertyInfo, crc);
                 telegram.Lines.Add(telegramEnd + crc);
-            }
-            else
-            {
+            } else {
                 telegram.Lines.Add(telegramEnd.ToString());
             }
         }
@@ -159,22 +139,20 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
         {
             var telegramProperties = GetTelegramProperties().Where(p => properties.Contains(p.Name));
 
-            foreach (PropertyInfo propertyInfo in telegramProperties)
+            foreach (var propertyInfo in telegramProperties)
             {
                 var obisAttribute =
                     propertyInfo.GetCustomAttributes(typeof(ObisAttribute), false)
                         .Cast<ObisAttribute>()
                         .FirstOrDefault();
 
-                if (obisAttribute == null)
-                {
+                if (obisAttribute == null) {
                     continue;
                 }
 
                 var valueForProperty = values.ElementAtOrDefault(obisAttribute.ValueIndex);
 
-                if (valueForProperty == null)
-                {
+                if (valueForProperty == null) {
                     continue;
                 }
 
@@ -190,24 +168,27 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common
 
         private static object GetConvertedPropertyValue(PropertyInfo propertyInfo, string value, string obisValueUnit = null)
         {
-            TypeConverter converter = TypeDescriptor.GetConverter(propertyInfo.PropertyType);
+            var converter = TypeDescriptor.GetConverter(propertyInfo.PropertyType);
             var converterAttribute =
                 propertyInfo.GetCustomAttributes(typeof(TypeConverterAttribute), false)
                     .Cast<TypeConverterAttribute>()
                     .FirstOrDefault();
 
-            if (converterAttribute != null)
-            {
+            if (converterAttribute != null) {
                 var converterType = Type.GetType(converterAttribute.ConverterTypeName);
+
+                if(converterType == null) {
+	                throw new InvalidOperationException($"Unable to determine converter type for: {converterAttribute.ConverterTypeName}");
+                }
+
                 converter = Activator.CreateInstance(converterType) as TypeConverter;
             }
 
-            if (!string.IsNullOrEmpty(obisValueUnit))
-            {
+            if (!string.IsNullOrEmpty(obisValueUnit)) {
                 value = value.Replace("*" + obisValueUnit, string.Empty);
             }
 
-            return converter.ConvertFromInvariantString(value);
+            return converter?.ConvertFromInvariantString(value);
         }
 
         private static IEnumerable<PropertyInfo> GetTelegramProperties()

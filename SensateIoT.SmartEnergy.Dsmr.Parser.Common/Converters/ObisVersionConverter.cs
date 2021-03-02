@@ -9,11 +9,10 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
     {
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            string stringValue = value as string;
-            if (!string.IsNullOrWhiteSpace(stringValue))
-            {
-                switch (stringValue)
-                {
+            var stringValue = value as string;
+
+            if (!string.IsNullOrWhiteSpace(stringValue)) {
+                switch (stringValue) {
                     case "20":
                         return ObisVersion.V20;
                     case "42":
@@ -24,10 +23,8 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
                         throw new NotSupportedException($"Value {stringValue} is not a recognized ObisVersion");
                 }
             }
-            else
-            {
-                return base.ConvertFrom(context, culture, value);
-            }
+
+            return base.ConvertFrom(context, culture, value);
         }
     }
 }

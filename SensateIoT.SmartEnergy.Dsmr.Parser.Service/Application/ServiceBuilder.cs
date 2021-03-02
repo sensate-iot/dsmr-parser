@@ -20,7 +20,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application
         public ServiceHost Build()
         {
             var uri = new Uri($"http://{this.m_hostname}:{this.m_port}/{this.m_path}");
-            return new ServiceHost(new ParserService(), uri);
+            return new ServiceHost(new ParserService(new Common.Services.Parser()), uri);
         }
 
         public ServiceBuilder WithHostname(string hostname)

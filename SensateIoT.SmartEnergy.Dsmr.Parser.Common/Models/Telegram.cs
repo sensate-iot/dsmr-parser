@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Attributes;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Data.Models;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models
 {
@@ -49,20 +49,5 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models
         {
             return string.Join(LineEnding, this.Lines) + LineEnding;
         }
-    }
-
-    [TypeConverter(typeof(ObisTariffConverter))]
-    public enum PowerTariff
-    {
-        Low,
-        Normal
-    }
-
-    [TypeConverter(typeof(ObisVersionConverter))]
-    public enum ObisVersion
-    {
-        V20,
-        V42,
-        V50
     }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Data.Models;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
 {

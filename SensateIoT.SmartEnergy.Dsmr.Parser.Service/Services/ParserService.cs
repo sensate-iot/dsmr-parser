@@ -4,21 +4,22 @@ using System.ServiceModel;
 
 using log4net;
 
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.DTO;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
 {
-	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
 	public class ParserService : IParserService
 	{
 		private static ILog logger = LogManager.GetLogger(nameof(ParserService));
-		private readonly Common.Parser m_parser;
+		private readonly IParser m_parser;
 
-		public ParserService()
+		public ParserService(IParser parser)
 		{
-			this.m_parser = new Common.Parser();
+			this.m_parser = parser;
 		}
 
 		public Telegram Parse(string frame)
