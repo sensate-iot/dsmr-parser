@@ -29,3 +29,8 @@ jobs:
 
       - name: MSBuild Version
         run: msbuild -version
+
+      - name: Run tests
+        run: |
+          msbuild
+          mstest /testcontainer:"SensateIoT.SmartEnergy.Dsmr.Parser.Tests\bin\Debug\SensateIoT.SmartEnergy.Dsmr.Parser.Tests.dll" /noisolation
