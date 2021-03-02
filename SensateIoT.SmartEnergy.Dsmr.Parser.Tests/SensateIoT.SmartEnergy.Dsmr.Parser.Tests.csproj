@@ -221,9 +221,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="Resources\v2.txt">
+    <EmbeddedResource Include="Resources\v2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </EmbeddedResource>
     <Content Include="Resources\v4.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

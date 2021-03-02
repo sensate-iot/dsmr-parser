@@ -24,6 +24,9 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
         }
 
         [TestMethod]
+		[DeploymentItem("Resources/v5.txt", "Resources")]
+		[DeploymentItem("Resources/v4.txt", "Resources")]
+		[DeploymentItem("Resources/v2.txt", "Resources")]
         public void CanParseV4()
         {
 	        var input = getTelegram("4");
@@ -52,7 +55,8 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
         private static string getTelegram(string version)
         {
 	        var current = Environment.CurrentDirectory;
-	        var v5File = $"{current}{Path.DirectorySeparatorChar}Resources{Path.DirectorySeparatorChar}v{version}.txt";
+	        //var v5File = $"{current}{Path.DirectorySeparatorChar}Resources{Path.DirectorySeparatorChar}v{version}.txt";
+			var v5File = $"Resources{Path.DirectorySeparatorChar}v{version}.txt";
 	        return File.ReadAllText(v5File);
         }
     }
