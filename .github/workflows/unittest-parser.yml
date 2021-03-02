@@ -1,0 +1,31 @@
+name: Parser unit tests
+on:
+  push:
+      # Publish `master` as Docker `latest` image.
+      branches:
+        - master
+        - develop
+        - feature/**
+        - release/**
+        - hotfix/**
+      # Publish `v1.2.3` tags as releases.
+      tags:
+        - v*
+  pull_request:
+    branches: 
+      - master
+      - develop
+
+jobs:
+  build-windows:
+    name: "Unit tests"
+    runs-on: windows-latest
+    steps:
+      - name: Clone source
+        uses: actions/checkout@v1
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: MSBuild Version
+        run: msbuild -version

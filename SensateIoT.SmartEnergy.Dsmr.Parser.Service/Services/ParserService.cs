@@ -14,7 +14,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
 	public class ParserService : IParserService
 	{
-		private static ILog logger = LogManager.GetLogger(nameof(ParserService));
+		private static readonly ILog logger = LogManager.GetLogger(nameof(ParserService));
 		private readonly IParser m_parser;
 
 		public ParserService(IParser parser)

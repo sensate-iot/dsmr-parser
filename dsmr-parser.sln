@@ -23,6 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensateIoT.SmartEnergy.Dsmr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SensateIoT.SmartEnergy.Dsmr.Parser.Tests", "SensateIoT.SmartEnergy.Dsmr.Parser.Tests\SensateIoT.SmartEnergy.Dsmr.Parser.Tests.csproj", "{2637EFC2-3A9A-4BD5-9A5B-30FE9DE874FF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Automated Builds", "Automated Builds", "{1DE2FE94-0052-42A3-B2A3-92966F05C79C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\unittest-parser.yml = .github\workflows\unittest-parser.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
