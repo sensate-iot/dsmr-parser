@@ -42,6 +42,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models
         public decimal GasConsumption { get; set; } = 0M;
         [Obis("0-1:24.2.1", 0), TypeConverter(typeof(ObisTimestampConverter))]
         public DateTime GasTimestamp { get; set; }
+		public bool HasGasConsumption { get; set; }
         public string CRC { get; set; }
         public IList<string> Lines { get; set; } = new List<string>();
 

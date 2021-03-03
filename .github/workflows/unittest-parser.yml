@@ -1,7 +1,6 @@
 name: Parser unit tests
 on:
   push:
-      # Publish `master` as Docker `latest` image.
       branches:
         - master
         - develop

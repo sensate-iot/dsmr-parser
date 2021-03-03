@@ -4,8 +4,8 @@ using Moq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
-using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 {

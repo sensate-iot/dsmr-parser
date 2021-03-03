@@ -2,7 +2,6 @@
 using System.ServiceModel;
 
 using log4net;
-
 using SensateIoT.SmartEnergy.Dsmr.Parser.Service.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application;
 
@@ -18,6 +17,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
             var builder = ServiceBuilder.Create();
 
             builder.WithHostname("localhost")
+	            .WithParser(new Common.Logic.Parser())
 				.WithPort(8080)
 				.WithPath("Dsmr/ParserService");
 
