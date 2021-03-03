@@ -1,8 +1,5 @@
-﻿using System;
-using System.IO;
-
+﻿using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
@@ -11,10 +8,11 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
     public class ParserTests
     {
         [TestMethod]
+		[DeploymentItem("Resources/v2.txt", "Resources")]
         public void CanParseV2()
         {
 	        var input = getTelegram("2");
-			var parser = new Common.Services.Parser();
+			var parser = new Common.Logic.Parser();
 			var result = parser.Parse(input).GetAwaiter().GetResult();
 
 			Assert.AreEqual(ObisVersion.V20, result.MessageVersion);
@@ -24,13 +22,11 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
         }
 
         [TestMethod]
-		[DeploymentItem("Resources/v5.txt", "Resources")]
 		[DeploymentItem("Resources/v4.txt", "Resources")]
-		[DeploymentItem("Resources/v2.txt", "Resources")]
         public void CanParseV4()
         {
 	        var input = getTelegram("4");
-	        var parser = new Common.Services.Parser();
+	        var parser = new Common.Logic.Parser();
 	        var result = parser.Parse(input).GetAwaiter().GetResult();
 
 	        Assert.AreEqual(ObisVersion.V42, result.MessageVersion);
@@ -40,10 +36,11 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 		}
 
         [TestMethod]
+		[DeploymentItem("Resources/v5.txt", "Resources")]
         public void CanParseV5()
         {
 	        var input = getTelegram("5");
-			var parser = new Common.Services.Parser();
+			var parser = new Common.Logic.Parser();
 			var result = parser.Parse(input).GetAwaiter().GetResult();
 
 			Assert.AreEqual(2745.056M, result.GasConsumption);
@@ -54,8 +51,6 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 
         private static string getTelegram(string version)
         {
-	        var current = Environment.CurrentDirectory;
-	        //var v5File = $"{current}{Path.DirectorySeparatorChar}Resources{Path.DirectorySeparatorChar}v{version}.txt";
 			var v5File = $"Resources{Path.DirectorySeparatorChar}v{version}.txt";
 	        return File.ReadAllText(v5File);
         }

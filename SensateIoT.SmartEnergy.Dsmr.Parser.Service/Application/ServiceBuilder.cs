@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application
@@ -10,6 +11,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application
         private string m_hostname;
         private string m_path;
         private int m_port;
+        private IParser m_parser;
 
         public static ServiceBuilder Create()
         {
@@ -20,7 +22,13 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application
         public ServiceHost Build()
         {
             var uri = new Uri($"http://{this.m_hostname}:{this.m_port}/{this.m_path}");
-            return new ServiceHost(new ParserService(new Common.Services.Parser()), uri);
+            return new ServiceHost(new ParserService(this.m_parser), uri);
+        }
+
+        public ServiceBuilder WithParser(IParser parser)
+        {
+	        this.m_parser = parser;
+	        return this;
         }
 
         public ServiceBuilder WithHostname(string hostname)

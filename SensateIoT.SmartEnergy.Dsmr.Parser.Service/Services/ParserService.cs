@@ -6,6 +6,7 @@ using log4net;
 
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters;
+using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.DTO;
 
@@ -15,10 +16,13 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
 	public class ParserService : IParserService
 	{
 		private static readonly ILog logger = LogManager.GetLogger(nameof(ParserService));
+
+		private readonly IGasFlowCalculator m_calc;
 		private readonly IParser m_parser;
 
 		public ParserService(IParser parser)
 		{
+			this.m_calc = new GasFlowCalculator(new SystemClock(), LogManager.GetLogger(nameof(GasFlowCalculator)));
 			this.m_parser = parser;
 		}
 
@@ -36,12 +40,22 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
 				logger.Info($"Parsing finished in {sw.Elapsed:c}");
 
 				result = TelegramConverter.Convert(parsed);
+				this.ComputeGasFlow(result, parsed);
 			} catch(Exception ex) {
 				logger.Error("Unable to parse telegram", ex);
 				throw ex;
 			}
 
 			return result;
+		}
+
+		private void ComputeGasFlow(Telegram telegram, Common.Models.Telegram parsed)
+		{
+			if(telegram.GasData == null) {
+				return;
+			}
+
+			telegram.GasData.GasFlow = this.m_calc.ComputeFlow(parsed);
 		}
 	}
 }
