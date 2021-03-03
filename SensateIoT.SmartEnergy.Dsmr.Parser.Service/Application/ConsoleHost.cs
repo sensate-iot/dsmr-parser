@@ -7,7 +7,9 @@
 
 using System;
 using System.Threading;
+
 using log4net;
+
 using SensateIoT.SmartEnergy.Dsmr.Parser.Service.Abstract;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application
