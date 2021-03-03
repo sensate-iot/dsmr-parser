@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-
 using log4net;
-
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.DTO;
-
 using Telegram = SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models.Telegram;
 
-namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Services
+namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 {
 	public class GasFlowCalculator : IGasFlowCalculator
 	{

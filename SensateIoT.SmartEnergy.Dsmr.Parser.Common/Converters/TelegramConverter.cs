@@ -7,8 +7,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
 	{
 		public static Telegram Convert(Models.Telegram input)
 		{
-			return new Telegram() {
-				GasConsumption = input.GasConsumption,
+			var telgram = new Telegram {
 				CurrentTariff = input.CurrentTariff == PowerTariff.Normal ? "NORMAL" : "LOW",
 				EnergyData =
 					new EnergyData {
@@ -25,7 +24,13 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters
 				}
 			};
 
+			if(input.HasGasConsumption) {
+				telgram.GasData = new GasData {
+					GasConsumption = input.GasConsumption
+				};
+			}
 
+			return telgram;
 		}
 	}
 }

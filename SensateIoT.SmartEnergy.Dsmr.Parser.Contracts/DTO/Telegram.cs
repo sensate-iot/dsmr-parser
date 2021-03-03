@@ -10,7 +10,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Contracts.DTO
 		[DataMember]
 		public EnergyData EnergyData { get; set; }
 		[DataMember]
-		public decimal GasConsumption { get; set; }
+		public GasData GasData { get; set; }
 		[DataMember]
 		public string CurrentTariff { get; set; }
 	}

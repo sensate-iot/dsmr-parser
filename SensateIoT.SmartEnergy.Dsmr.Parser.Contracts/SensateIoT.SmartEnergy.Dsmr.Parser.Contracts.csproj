@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Abstract\IParserService.cs" />
     <Compile Include="DTO\EnergyData.cs" />
+    <Compile Include="DTO\GasData.cs" />
     <Compile Include="DTO\PowerData.cs" />
     <Compile Include="DTO\Telegram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
