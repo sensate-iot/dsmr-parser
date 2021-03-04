@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Attributes;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Converters;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Data.Models;
