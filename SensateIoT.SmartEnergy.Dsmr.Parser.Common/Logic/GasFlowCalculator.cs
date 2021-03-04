@@ -35,6 +35,10 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 
 		private decimal ComputePerMinute(GasFlowCacheEntry old, Telegram @new)
 		{
+			if(@new.GasTimestamp == old.Timestamp) {
+				return 0M;
+			}
+
 			var diff = @new.GasTimestamp.Subtract(old.Timestamp);
 			var usage = @new.GasConsumption - old.Value;
 
