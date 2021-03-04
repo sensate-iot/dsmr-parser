@@ -29,14 +29,14 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 				result = this.ComputePerMinute(old, telegram);
 			}
 
-			this.UpdateCache(telegram);
+			this.UpdateCache(telegram, result);
 			return result;
 		}
 
 		private decimal ComputePerMinute(GasFlowCacheEntry old, Telegram @new)
 		{
 			if(@new.GasTimestamp == old.Timestamp) {
-				return 0M;
+				return old.LastGasFlowResult;
 			}
 
 			var diff = @new.GasTimestamp.Subtract(old.Timestamp);
@@ -50,11 +50,12 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 			return usage / Convert.ToDecimal(diff.TotalMinutes);
 		}
 
-		private void UpdateCache(Telegram telegram)
+		private void UpdateCache(Telegram telegram, decimal current)
 		{
 			var entry = new GasFlowCacheEntry {
 				Timestamp = telegram.GasTimestamp,
-				Value = telegram.GasConsumption
+				Value = telegram.GasConsumption,
+				LastGasFlowResult = current
 			};
 
 			this.m_telegrams.AddOrUpdate(telegram.SerialNumberGasMeter, entry, (serial, oldValue) => entry);
