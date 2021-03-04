@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.ServiceProcess;
 
 using log4net;
@@ -27,12 +28,17 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Application
 
         private static void RunInteractive()
         {
-			logger.Info("Starting as console application.");
 			var server = new Server();
-			server.Start();
-			Console.WriteLine();
+			var program = new ConsoleHost(server);
+
+			program.Run();
+
+			if(!Debugger.IsAttached) {
+				return;
+			}
+
+			Console.WriteLine("Press <ENTER> key to close...");
 			Console.ReadLine();
-			server.Stop();
         }
     }
 }

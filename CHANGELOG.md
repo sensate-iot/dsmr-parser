@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 - Gas flow calculator
 - Gas measurement caching
+- Implement a console application host
 
 ## [0.0.1] - 02-03-2021
 ### Added
