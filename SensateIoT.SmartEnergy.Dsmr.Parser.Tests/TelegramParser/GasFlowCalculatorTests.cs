@@ -1,9 +1,10 @@
 ﻿using System;
+
 using log4net;
 using Moq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
+
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models;
 
@@ -17,23 +18,20 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 		{
 			var input1 = new Telegram {
 				GasConsumption = 1,
-				SerialNumberGasMeter = "1234"
+				SerialNumberGasMeter = "1234",
+				GasTimestamp = DateTime.UtcNow
 			};
 
 			var input2 = new Telegram {
 				GasConsumption = 2,
-				SerialNumberGasMeter = "1234"
+				SerialNumberGasMeter = "1234",
+				GasTimestamp = DateTime.UtcNow.AddSeconds(1)
 			};
 
-			var now = DateTime.UtcNow;
 			var log = new Mock<ILog>();
-			var clock = new Mock<ISystemClock>();
-			clock.Setup(x => x.GetNowUtc()).Returns(now);
-			var calc = new GasFlowCalculator(clock.Object, log.Object);
+			var calc = new GasFlowCalculator(log.Object);
 
 			calc.ComputeFlow(input1);
-			now = now.Add(TimeSpan.FromSeconds(1));
-			clock.Setup(x => x.GetNowUtc()).Returns(now);
 			var diff = calc.ComputeFlow(input2);
 
 			Assert.AreEqual(60, Math.Round(diff));
@@ -58,11 +56,13 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 		{
 			var input1 = new Telegram {
 				GasConsumption = 1,
-				SerialNumberGasMeter = "1234"
+				SerialNumberGasMeter = "1234",
+				GasTimestamp = DateTime.UtcNow
 			};
 			var input2 = new Telegram {
 				GasConsumption = 0.5M,
-				SerialNumberGasMeter = "1234"
+				SerialNumberGasMeter = "1234",
+				GasTimestamp = DateTime.UtcNow.AddSeconds(1)
 			};
 
 			var calc = createGasFlowCalculator();
@@ -75,9 +75,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Tests.TelegramParser
 		private static GasFlowCalculator createGasFlowCalculator()
 		{
 			var log = new Mock<ILog>();
-			var clock = new Mock<ISystemClock>();
-
-			return new GasFlowCalculator(clock.Object, log.Object);
+			return new GasFlowCalculator(log.Object);
 		}
 	}
 }

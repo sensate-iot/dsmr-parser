@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
+
 using log4net;
+
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.Abstract;
 using SensateIoT.SmartEnergy.Dsmr.Parser.Common.DTO;
+
 using Telegram = SensateIoT.SmartEnergy.Dsmr.Parser.Common.Models.Telegram;
 
 namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
@@ -11,13 +14,11 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 	{
 		private readonly ConcurrentDictionary<string, GasFlowCacheEntry> m_telegrams;
 		private readonly ILog m_logger;
-		private readonly ISystemClock m_clock;
 
-		public GasFlowCalculator(ISystemClock clock, ILog logger)
+		public GasFlowCalculator(ILog logger)
 		{
 			this.m_logger = logger;
 			this.m_telegrams = new ConcurrentDictionary<string, GasFlowCacheEntry>();
-			this.m_clock = clock;
 		}
 
 		public decimal ComputeFlow(Telegram telegram)
@@ -28,13 +29,17 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 				result = this.ComputePerMinute(old, telegram);
 			}
 
-			this.UpdateCache(telegram);
+			this.UpdateCache(telegram, result);
 			return result;
 		}
 
 		private decimal ComputePerMinute(GasFlowCacheEntry old, Telegram @new)
 		{
-			var diff = this.m_clock.GetNowUtc().Subtract(old.Timestamp);
+			if(@new.GasTimestamp == old.Timestamp) {
+				return old.LastGasFlowResult;
+			}
+
+			var diff = @new.GasTimestamp.Subtract(old.Timestamp);
 			var usage = @new.GasConsumption - old.Value;
 
 			if(usage < 0) {
@@ -45,11 +50,12 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Common.Logic
 			return usage / Convert.ToDecimal(diff.TotalMinutes);
 		}
 
-		private void UpdateCache(Telegram telegram)
+		private void UpdateCache(Telegram telegram, decimal current)
 		{
 			var entry = new GasFlowCacheEntry {
-				Timestamp = this.m_clock.GetNowUtc(),
-				Value = telegram.GasConsumption
+				Timestamp = telegram.GasTimestamp,
+				Value = telegram.GasConsumption,
+				LastGasFlowResult = current
 			};
 
 			this.m_telegrams.AddOrUpdate(telegram.SerialNumberGasMeter, entry, (serial, oldValue) => entry);

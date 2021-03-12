@@ -22,7 +22,7 @@ namespace SensateIoT.SmartEnergy.Dsmr.Parser.Service.Services
 
 		public ParserService(IParser parser)
 		{
-			this.m_calc = new GasFlowCalculator(new SystemClock(), LogManager.GetLogger(nameof(GasFlowCalculator)));
+			this.m_calc = new GasFlowCalculator(LogManager.GetLogger(nameof(GasFlowCalculator)));
 			this.m_parser = parser;
 		}
 
